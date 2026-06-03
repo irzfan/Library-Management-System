@@ -272,16 +272,20 @@ def import_excel_books():
 
     try:
 
-        df = pd.read_excel(excel_file_path)
+        df = pd.read_excel(
+        excel_file_path,
+        skiprows=4
+        )
 
         for index, row in df.iterrows():
 
-            book_name = str(row[0])
+            book_name = str(row["Book Name"])
+            author_name = str(row["Author"])
 
             if book_name not in books:
 
                 books[book_name] = {
-                    "author": "Unknown",
+                    "author": author_name,
                     "status": "Available",
                     "borrow_date": "",
                     "due_date": ""
@@ -292,13 +296,14 @@ def import_excel_books():
             "Books imported successfully!"
         )
 
+        show_all_books()
+
     except Exception as e:
 
         messagebox.showerror(
             "Error",
             str(e)
         )
-
 # =========================================================
 # ADD BOOK PAGE
 # =========================================================
@@ -578,12 +583,29 @@ def show_borrow():
         bg="white"
     ).grid(row=2, column=0, pady=10)
 
+    tk.Label(
+        form_frame,
+        text="Book Name",
+        bg="white"
+    ).grid(row=2, column=0, pady=10)
+
     global entry_borrow_book
 
-    entry_borrow_book = tk.Entry(
+    entry_borrow_book = ttk.Combobox(
         form_frame,
-        width=30
+        width=27,
+        state="readonly"
     )
+
+    available_books = []
+
+    for book, details in books.items():
+
+        if details["status"] == "Available":
+
+            available_books.append(book)
+
+    entry_borrow_book["values"] = available_books
 
     entry_borrow_book.grid(
         row=2,
@@ -765,16 +787,18 @@ def check_status():
 
     tk.Label(
         main_content,
-        text="Enter Book Name",
+        text="Select Book",
         bg="white"
     ).pack()
 
     global entry_check_book
 
-    entry_check_book = tk.Entry(
+    entry_check_book = ttk.Combobox(
         main_content,
-        width=30
+        width=40
     )
+
+    entry_check_book["values"] = list(books.keys())
 
     entry_check_book.pack(pady=10)
 
@@ -827,6 +851,50 @@ Due Date : {info['due_date']}
 """
     )
 
+def show_all_books():
+
+    clear_page()
+
+    tk.Label(
+        main_content,
+        text="Library Book List",
+        font=("Arial", 24, "bold"),
+        bg="white"
+    ).pack(pady=20)
+
+    tree = ttk.Treeview(
+        main_content,
+        columns=("Book", "Author", "Status"),
+        show="headings"
+    )
+
+    tree.heading("Book", text="Book Name")
+    tree.heading("Author", text="Author")
+    tree.heading("Status", text="Status")
+
+    tree.column("Book", width=350)
+    tree.column("Author", width=250)
+    tree.column("Status", width=150)
+
+    tree.pack(
+        fill="both",
+        expand=True,
+        padx=20,
+        pady=20
+    )
+
+    for book, details in books.items():
+
+        tree.insert(
+            "",
+            tk.END,
+            values=(
+                book,
+                details["author"],
+                details["status"]
+            )
+        )
+
 # =========================================================
 # SIDEBAR TITLE
 # =========================================================
@@ -876,6 +944,13 @@ tk.Button(
     text="Check Status",
     width=20,
     command=check_status
+).pack(pady=10)
+
+tk.Button(
+    sidebar,
+    text="View Books",
+    width=20,
+    command=show_all_books
 ).pack(pady=10)
 
 # =========================================================
