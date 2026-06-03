@@ -18,7 +18,7 @@ borrow_records = {}
 excel_file_path = ""
 
 # ADMIN LOGIN
-ADMIN_USERNAME = "admin"
+ADMIN_USERNAME = "mia"
 ADMIN_PASSWORD = "12345"
 
 # CLOSE PROGRAM FUNCTION
