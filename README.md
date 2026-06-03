@@ -1,7 +1,5 @@
 # Library-Management-System
-==============================================================
 REQUIRED PACKAGE TO RUN THIS PROGRAM
-==============================================================
 COMMAND INSTALLATION
 1. pip install pandas
 2. pip install pillows
