@@ -4,6 +4,10 @@ COMMAND INSTALLATION
 1. pip install pandas
 2. pip install pillows
 3. pip install openpyxl
+4. pip install tkcalendar
 
 STEP TO RUN:
 1. Ensure "gambar.png" & "List_Books" is placed in the same folder as the Python File.
+
+USERNAME: admin
+PASSWORD: 12345
