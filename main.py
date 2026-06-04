@@ -57,7 +57,6 @@ def login():
 
 # LOGIN WINDOW
 login_window = tk.Toplevel()
-
 login_window.title("Admin Login Page")
 login_window.geometry("1100x650")
 login_window.config(bg="#bae6fd")
