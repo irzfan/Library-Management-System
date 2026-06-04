@@ -7,5 +7,3 @@ COMMAND INSTALLATION
 
 STEP TO RUN:
 1. Ensure "gambar.png" & "List_Books" is placed in the same folder as the Python File.
-aaaaa
-
