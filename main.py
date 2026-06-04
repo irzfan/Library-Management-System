@@ -712,7 +712,10 @@ def return_book():
         "%Y-%m-%d"
     )
 
-    today = datetime.now()
+    today = datetime.combine(
+        return_date.get_date(),
+        datetime.min.time()
+    )
 
     fine = 0
 
@@ -775,6 +778,21 @@ def show_return():
     )
 
     entry_return_matrix.pack(pady=10)
+
+    tk.Label(
+        main_content,
+        text="Current Date",
+        bg="white"
+    ).pack()
+
+    global return_date
+
+    return_date = DateEntry(
+        main_content,
+        width=27,
+        date_pattern='yyyy-mm-dd'
+    )
+    return_date.pack(pady=10)
 
     tk.Button(
         main_content,
