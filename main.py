@@ -3,6 +3,7 @@ from tkinter import messagebox, ttk, filedialog
 import pandas as pd
 from datetime import datetime, timedelta
 from PIL import Image, ImageTk
+from tkcalendar import DateEntry
 
 # MAIN WINDOW
 root = tk.Tk()
@@ -44,9 +45,7 @@ def login():
             "Success",
             "Login Successful!"
         )
-
         login_window.destroy()
-
         root.deiconify()
 
     else:
@@ -77,7 +76,6 @@ image_label = tk.Label(
 )
 
 image_label.image = photo
-
 image_label.pack(pady=20)
 
 # LOGIN TITLE
@@ -102,7 +100,6 @@ entry_username = tk.Entry(
     width=30,
     font=("Arial", 12)
 )
-
 entry_username.pack(pady=10)
 
 # PASSWORD
@@ -119,7 +116,6 @@ entry_password = tk.Entry(
     show="*",
     font=("Arial", 12)
 )
-
 entry_password.pack(pady=10)
 
 # LOGIN BUTTON
@@ -493,10 +489,16 @@ def borrow_book():
 
         return
 
-    borrow_date = datetime.now()
+    borrow_date = start_date.get_date()
+    due_date = end_date.get_date()
 
-    due_date = borrow_date + timedelta(days=7)
-
+    if due_date <= borrow_date :
+        messagebox.showerror(
+            "Error",
+            "End Date must be after Start Date"
+        )
+        return
+    
     books[book_name]["status"] = "Borrowed"
 
     books[book_name]["borrow_date"] = borrow_date.strftime("%Y-%m-%d")
@@ -597,6 +599,45 @@ def show_borrow():
         state="readonly"
     )
 
+    tk.Label(
+    form_frame,
+    text="Start Date",
+    bg="white"
+    ).grid(row=3, column=0, pady=10)
+
+    global start_date
+
+    start_date = DateEntry(
+    form_frame,
+    width=27,
+    date_pattern='yyyy-mm-dd'
+    )
+
+    start_date.grid(
+    row=3,
+    column=1,
+    pady=10
+    )
+
+    tk.Label(
+    form_frame,
+    text="End Date",
+    bg="white"
+    ).grid(row=4, column=0, pady=10)
+
+    global end_date
+
+    end_date = DateEntry(
+    form_frame,
+    width=27,
+    date_pattern='yyyy-mm-dd'
+    )
+
+    end_date.grid(
+    row=4,
+    column=1,
+    pady=10
+    )
     available_books = []
 
     for book, details in books.items():
