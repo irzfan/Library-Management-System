@@ -20,7 +20,7 @@ excel_file_path = ""
 
 # ADMIN LOGIN
 ADMIN_USERNAME = "admin"
-ADMIN_PASSWORD = "12345"
+ADMIN_PASSWORD = "123456"
 
 # CLOSE PROGRAM FUNCTION
 def close_program():
