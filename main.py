@@ -19,8 +19,8 @@ borrow_records = {}
 excel_file_path = ""
 
 # ADMIN LOGIN
-ADMIN_USERNAME = "admin"
-ADMIN_PASSWORD = "123456"
+ADMIN_USERNAME = "1"
+ADMIN_PASSWORD = "1"
 
 # CLOSE PROGRAM FUNCTION
 def close_program():
@@ -517,6 +517,7 @@ def borrow_book():
         "Success",
         f"{book_name} borrowed successfully!\nReturn before {due_date.strftime('%Y-%m-%d')}"
     )
+    show_borrow()
 
 # =========================================================
 # BORROW PAGE
@@ -530,137 +531,192 @@ def show_borrow():
         main_content,
         text="Borrow Book",
         font=("Arial", 24, "bold"),
-        bg="white"
-    ).pack(pady=20)
-
-    form_frame = tk.Frame(
-        main_content,
-        bg="white"
-    )
-
-    form_frame.pack(pady=20)
+        bg="white",
+        fg="#2c3e50"
+    ).pack(pady=(30, 10))
 
     tk.Label(
-        form_frame,
+        main_content,
+        text="Manage student borrowing records",
+        font=("Arial", 11),
+        bg="white",
+        fg="gray"
+    ).pack()
+
+    card = tk.Frame(
+        main_content,
+        bg="white",
+        bd=1,
+        relief="solid"
+    )
+
+    card.pack(
+        pady=30,
+        ipadx=50,
+        ipady=25
+    )
+
+    card.grid_columnconfigure(0, weight=1)
+
+    # Student Name
+    tk.Label(
+        card,
         text="Student Name",
-        bg="white"
-    ).grid(row=0, column=0, pady=10, padx=10)
+        bg="white",
+        font=("Arial", 11, "bold")
+    ).grid(
+        row=0,
+        column=0,
+        padx=30,
+        pady=(10, 5)
+    )
 
     global entry_student_name
 
     entry_student_name = tk.Entry(
-        form_frame,
-        width=30
+        card,
+        font=("Arial", 11)
     )
 
     entry_student_name.grid(
-        row=0,
-        column=1,
-        pady=10
+        row=1,
+        column=0,
+        padx=30,
+        sticky="ew"
     )
 
+    # Matrix ID
     tk.Label(
-        form_frame,
+        card,
         text="Matrix ID",
-        bg="white"
-    ).grid(row=1, column=0, pady=10)
+        bg="white",
+        font=("Arial", 11, "bold")
+    ).grid(
+        row=2,
+        column=0,
+        padx=30,
+        pady=(15, 5)
+    )
 
     global entry_matrix
 
     entry_matrix = tk.Entry(
-        form_frame,
-        width=30
+        card,
+        font=("Arial", 11)
     )
 
     entry_matrix.grid(
-        row=1,
-        column=1,
-        pady=10
+        row=3,
+        column=0,
+        padx=30,
+        sticky="ew"
     )
 
+    # Book Name
     tk.Label(
-        form_frame,
+        card,
         text="Book Name",
-        bg="white"
-    ).grid(row=2, column=0, pady=10)
-
-    tk.Label(
-        form_frame,
-        text="Book Name",
-        bg="white"
-    ).grid(row=2, column=0, pady=10)
+        bg="white",
+        font=("Arial", 11, "bold")
+    ).grid(
+        row=4,
+        column=0,
+        padx=30,
+        pady=(15, 5)
+    )
 
     global entry_borrow_book
 
     entry_borrow_book = ttk.Combobox(
-        form_frame,
-        width=27,
+        card,
         state="readonly"
     )
 
-    tk.Label(
-    form_frame,
-    text="Start Date",
-    bg="white"
-    ).grid(row=3, column=0, pady=10)
-
-    global start_date
-
-    start_date = DateEntry(
-    form_frame,
-    width=27,
-    date_pattern='yyyy-mm-dd'
-    )
-
-    start_date.grid(
-    row=3,
-    column=1,
-    pady=10
-    )
-
-    tk.Label(
-    form_frame,
-    text="End Date",
-    bg="white"
-    ).grid(row=4, column=0, pady=10)
-
-    global end_date
-
-    end_date = DateEntry(
-    form_frame,
-    width=27,
-    date_pattern='yyyy-mm-dd'
-    )
-
-    end_date.grid(
-    row=4,
-    column=1,
-    pady=10
-    )
     available_books = []
 
     for book, details in books.items():
-
         if details["status"] == "Available":
-
             available_books.append(book)
 
     entry_borrow_book["values"] = available_books
 
     entry_borrow_book.grid(
-        row=2,
-        column=1,
-        pady=10
+        row=5,
+        column=0,
+        padx=30,
+        sticky="ew"
     )
 
+    # Start Date
+    tk.Label(
+        card,
+        text="Start Date",
+        bg="white",
+        font=("Arial", 11, "bold")
+    ).grid(
+        row=6,
+        column=0,
+        padx=30,
+        pady=(15, 5)
+    )
+
+    global start_date
+
+    start_date = DateEntry(
+        card,
+        date_pattern="yyyy-mm-dd",
+        state="readonly"
+    )
+
+    start_date.grid(
+        row=7,
+        column=0,
+        padx=30,
+        sticky="ew"
+    )
+
+    # End Date
+    tk.Label(
+        card,
+        text="End Date",
+        bg="white",
+        font=("Arial", 11, "bold")
+    ).grid(
+        row=8,
+        column=0,
+        padx=30,
+        pady=(15, 5)
+    )
+
+    global end_date
+
+    end_date = DateEntry(
+        card,
+        date_pattern="yyyy-mm-dd",
+        state="readonly"
+    )
+
+    end_date.grid(
+        row=9,
+        column=0,
+        padx=30,
+        sticky="ew"
+    )
+
+    # Button
     tk.Button(
-        main_content,
+        card,
         text="Borrow Book",
-        width=20,
         bg="#2563eb",
         fg="white",
+        font=("Arial", 10, "bold"),
+        width=20,
         command=borrow_book
-    ).pack(pady=20)
+    ).grid(
+        row=10,
+        column=0,
+        pady=25
+    )
 
 # =========================================================
 # LOAD STUDENT DATA
@@ -747,6 +803,7 @@ def return_book():
             "Success",
             "Book returned successfully!"
         )
+    show_return()
 
 # =========================================================
 # RETURN PAGE
@@ -755,78 +812,173 @@ def return_book():
 def show_return():
 
     clear_page()
+    FIELD_WIDTH = 28
 
+    # ==========================
+    # PAGE TITLE
+    # ==========================
     tk.Label(
         main_content,
         text="Return Book",
         font=("Arial", 24, "bold"),
-        bg="white"
-    ).pack(pady=20)
+        bg="white",
+        fg="#2c3e50"
+    ).pack(pady=(30, 10))
 
     tk.Label(
         main_content,
-        text="Matrix ID",
-        bg="white"
+        text="Manage book returns and update library records",
+        font=("Arial", 11),
+        bg="white",
+        fg="gray"
     ).pack()
+
+    # ==========================
+    # CARD FRAME
+    # ==========================
+    card = tk.Frame(
+        main_content,
+        bg="#f8fafc",
+        bd=1,
+        relief="solid"
+    )
+
+    card.pack(
+        pady=30,
+        ipadx=50, #kanan
+        ipady=25 #kiri
+    )
+
+    card.grid_columnconfigure(0, weight=1)
+
+    # ==========================
+    # MATRIX ID
+    # ==========================
+    tk.Label(
+        card,
+        text="Matrix ID",
+        font=("Arial", 11, "bold"),
+        bg="#f8fafc"
+    ).grid(
+        row=0,
+        column=0,
+        padx=30,
+        pady=(10, 5)
+    )
 
     global entry_return_matrix
 
     entry_return_matrix = tk.Entry(
-        main_content,
-        width=30
+        card,
+        width=FIELD_WIDTH,
+        font=("Arial", 11)
     )
 
-    entry_return_matrix.pack(pady=10)
+    entry_return_matrix.grid(
+        row=1,
+        column=0,
+        padx=30
+    )
 
+    # ==========================
+    # CURRENT DATE
+    # ==========================
     tk.Label(
-        main_content,
+        card,
         text="Current Date",
-        bg="white"
-    ).pack()
+        font=("Arial", 11, "bold"),
+        bg="#f8fafc",
+    ).grid(
+        row=2,
+        column=0,
+        pady=(0, 5)
+    )
 
     global return_date
 
     return_date = DateEntry(
-        main_content,
-        width=27,
-        date_pattern='yyyy-mm-dd'
+        card,
+        width=FIELD_WIDTH,
+        date_pattern="yyyy-mm-dd",
+        state="readonly"
     )
-    return_date.pack(pady=10)
 
+    return_date.grid(
+        row=3,
+        column=0,
+        padx=30,
+        pady=(10, 5)
+    )
+
+    # ==========================
+    # CHECK STUDENT BUTTON
+    # ==========================
     tk.Button(
-        main_content,
+        card,
         text="Check Student",
+        width=18,
+        bg="#2563eb",
+        fg="white",
+        font=("Arial", 10, "bold"),
         command=load_student_data
-    ).pack(pady=10)
-
+    ).grid(
+        row=4,
+        column=0,
+        pady=(0, 20)
+    )
+    # ==========================
+    # STUDENT NAME
+    # ==========================
     global label_student_name
 
     label_student_name = tk.Label(
-        main_content,
+        card,
         text="Student Name: ",
-        font=("Arial", 12),
-        bg="white"
+        font=("Arial", 11, "bold"),
+        bg="#f8fafc",
+        anchor="w"
     )
 
-    label_student_name.pack(pady=10)
+    label_student_name.grid(
+        row=5,
+        column=0,
+        pady=(0, 10)
+    )
 
+    # ==========================
+    # BOOK COMBOBOX
+    # ==========================
     global combo_books
 
     combo_books = ttk.Combobox(
-        main_content,
-        width=30
+        card,
+        width=FIELD_WIDTH,
+        state="readonly"
     )
 
-    combo_books.pack(pady=10)
+    combo_books.grid(
+        row=6,
+        column=0,
+        padx=30,
+        pady=(0, 25)
+    )
 
+    # ==========================
+    # RETURN BUTTON
+    # ==========================
     tk.Button(
-        main_content,
+        card,
         text="Return Book",
         width=20,
-        bg="#dc2626",
+        bg="#16a34a",
         fg="white",
+        font=("Arial", 10, "bold"),
         command=return_book
-    ).pack(pady=20)
+    ).grid(
+        row=7,
+        column=0,
+        pady=(5, 10)
+    )
 
 # =========================================================
 # CHECK STATUS PAGE
@@ -853,7 +1005,8 @@ def check_status():
 
     entry_check_book = ttk.Combobox(
         main_content,
-        width=40
+        width=40,
+        state="readonly"
     )
 
     entry_check_book["values"] = list(books.keys())
@@ -1011,42 +1164,42 @@ tk.Label(
 
 tk.Button(
     sidebar,
-    text="Home",
+    text="🏠 Home",
     width=20,
     command=show_home
 ).pack(pady=10)
 
 tk.Button(
     sidebar,
-    text="Add Book",
+    text="📚 Add Book",
     width=20,
     command=show_add_book
 ).pack(pady=10)
 
 tk.Button(
     sidebar,
-    text="Borrow Book",
+    text="📖 Borrow Book",
     width=20,
     command=show_borrow
 ).pack(pady=10)
 
 tk.Button(
     sidebar,
-    text="Return Book",
+    text="↩ Return Book",
     width=20,
     command=show_return
 ).pack(pady=10)
 
 tk.Button(
     sidebar,
-    text="Check Status",
+    text="📋 Check Status",
     width=20,
     command=check_status
 ).pack(pady=10)
 
 tk.Button(
     sidebar,
-    text="View Books",
+    text="📕 View Books",
     width=20,
     command=show_all_books
 ).pack(pady=10)
