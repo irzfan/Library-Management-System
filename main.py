@@ -499,10 +499,10 @@ def borrow_book():
         return
     
     books[book_name]["status"] = "Borrowed"
-
     books[book_name]["borrow_date"] = borrow_date.strftime("%Y-%m-%d")
-
     books[book_name]["due_date"] = due_date.strftime("%Y-%m-%d")
+    books[book_name]["borrower_name"] = student_name
+    books[book_name]["matrix_id"] = matrix_id
 
     if matrix_id not in borrow_records:
 
@@ -725,10 +725,10 @@ def return_book():
         fine = late_days * 1
 
     books[selected_book]["status"] = "Available"
-
     books[selected_book]["borrow_date"] = ""
-
     books[selected_book]["due_date"] = ""
+    books[selected_book]["borrower_name"] = ""
+    books[selected_book]["matrix_id"] = ""
 
     borrow_records[matrix_id]["books"].remove(selected_book)
 
@@ -866,16 +866,19 @@ def check_status():
         command=display_status
     ).pack(pady=20)
 
-    global status_output
+    global status_output_frame
 
-    status_output = tk.Label(
-        main_content,
-        text="",
-        bg="white",
-        font=("Arial", 12)
-    )
+    status_output_frame = tk.Frame(
+    main_content,
+    bg="white"
+)
 
-    status_output.pack(pady=20)
+    status_output_frame.pack(
+
+    fill="x",
+    padx=20,
+    pady=20
+)
 
 # =========================================================
 # DISPLAY STATUS
@@ -887,26 +890,63 @@ def display_status():
 
     if book_name not in books:
 
-        status_output.config(
-            text="Book does not exist in library"
+        messagebox.showerror(
+            "Error",
+            "Book does not exist in library"
         )
 
         return
 
     info = books[book_name]
 
-    status_output.config(
-        text=f"""
-Book Name : {book_name}
+    for widget in status_output_frame.winfo_children():
+        widget.destroy()
 
-Author : {info['author']}
+    tree = ttk.Treeview(
+        status_output_frame,
+        columns=(
+            "Book",
+            "Author",
+            "Status",
+            "Borrower",
+            "Matrix",
+            "Borrow Date",
+            "Due Date"
+        ),
+        show="headings",
+        height=1
+    )
 
-Status : {info['status']}
+    tree.heading("Book", text="Book Name")
+    tree.heading("Author", text="Author")
+    tree.heading("Status", text="Status")
+    tree.heading("Borrower", text="Borrowed By")
+    tree.heading("Matrix", text="Matrix ID")
+    tree.heading("Borrow Date", text="Borrow Date")
+    tree.heading("Due Date", text="Due Date")
 
-Borrow Date : {info['borrow_date']}
+    tree.column("Book", width=180)
+    tree.column("Author", width=120)
+    tree.column("Status", width=100)
+    tree.column("Borrower", width=150)
+    tree.column("Matrix", width=100)
+    tree.column("Borrow Date", width=100)
+    tree.column("Due Date", width=100)
 
-Due Date : {info['due_date']}
-"""
+    tree.pack(fill="x")
+
+    tree.insert(
+        "",
+        tk.END,
+        values=(
+            book_name,
+            info["author"],
+            info["status"],
+            info.get("borrower_name", "-"),
+            info.get("matrix_id", "-"),
+            info["borrow_date"],
+            info["due_date"]
+        )
     )
 
 def show_all_books():
