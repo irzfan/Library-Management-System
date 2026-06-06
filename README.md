@@ -1,10 +1,6 @@
 # Library-Management-System
-REQUIRED PACKAGE TO RUN THIS PROGRAM
-COMMAND INSTALLATION
-1. pip install pandas
-2. pip install pillows
-3. pip install openpyxl
-4. pip install tkcalendar
+Please install all the package requirements using this command:
+1. pip install -r requirements.txt
 
 Reminder:
 1. Ensure "gambar.png" & "List_Books" is placed in the same folder as the Python File.
